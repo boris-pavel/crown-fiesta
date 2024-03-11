@@ -16,7 +16,7 @@ To install Crown Fiesta, you need to have Python 3 and pip installed on your sys
 
 To play Crown Fiesta, open your browser and go to `http://localhost:5000`. You will see the game interface with the reels, the paytable, and the buttons. You can adjust your bet size. To spin the reels you must first register, log in, click the `Spin` button.
 
-The game has various symbols, such as crowns, 7s, bells, cherries, grapes, lemons and more. The crown symbol is the wild, which can substitute for any other symbol except the scatter. The scatter symbol is the dollar and the star, . The free spins feature awards you 10 free spins with a 3x multiplier.
+The game has various symbols, such as crowns, 7s, bells, cherries, grapes, lemons and more. The crown symbol is the wild, which can substitute for any other symbol except the scatter. The scatter symbol is the dollar and the star.
 
 
 ## Paytable
