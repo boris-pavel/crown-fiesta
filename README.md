@@ -2,6 +2,10 @@
 
 Crown Fiesta is a slot game built with Flask and Bootstrap. It has 5 reels and 9 paylines, and features colorful graphics.
 
+## Demo
+
+[Video Demo](https://www.youtube.com/watch?v=z-HksZgdPpg)
+
 ## Installation
 
 To install Crown Fiesta, you need to have Python 3 and pip installed on your system. Then, follow these steps:
