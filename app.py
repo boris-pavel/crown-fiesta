@@ -1,16 +1,42 @@
-from symbols import SEVEN, CHERRY, LEMON, PLUM, WATERMELON, STAR, ORANGE, GRAPE, DOLLAR, CROWN, BELL;
+from symbols import (
+    SEVEN,
+    CHERRY,
+    LEMON,
+    PLUM,
+    WATERMELON,
+    STAR,
+    ORANGE,
+    GRAPE,
+    DOLLAR,
+    CROWN,
+    BELL,
+)
 from flask import Flask, render_template, request
 import random
-from helpers import eliminate_column_duplicates, expand_crown;
-SYMBOLS = [CROWN, STAR, DOLLAR, SEVEN, CHERRY, LEMON, PLUM, WATERMELON, ORANGE, GRAPE, BELL]
+from helpers import eliminate_column_duplicates, expand_crown, calculate_total_winnings
+
+SYMBOLS = [
+    CROWN,
+    STAR,
+    DOLLAR,
+    SEVEN,
+    CHERRY,
+    LEMON,
+    PLUM,
+    WATERMELON,
+    ORANGE,
+    GRAPE,
+    BELL,
+]
 
 
 # Configure application
 app = Flask(__name__)
 
 # Set debug mode
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -32,12 +58,19 @@ def index():
             game.append(line)
         eliminate_column_duplicates(game)
         expand_crown(game)
-        return render_template("index.html", game=game, balance=0)
+        win = calculate_total_winnings(game, 5)
+        return render_template("index.html", game=game, balance=0, win=win)
     else:
-        return render_template("index.html", game= [[SEVEN, CROWN, SEVEN, PLUM, ORANGE],
-                                                    [SEVEN, CROWN, SEVEN, SEVEN, STAR],
-                                                    [SEVEN, CROWN, BELL, ORANGE, CHERRY]], balance = 0)
+        return render_template(
+            "index.html",
+            game=[
+                [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
+                [SEVEN, CROWN, SEVEN, SEVEN, STAR],
+                [SEVEN, CROWN, BELL, ORANGE, CHERRY],
+            ],
+            balance=0,
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

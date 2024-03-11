@@ -7,7 +7,7 @@ Crown Fiesta
 
 {% block game %}
 <main class="container w-50 mx-auto row">
-    <div class="container bg-dark-subtle p-5 mt-5 row rounded-top" id="game">
+    <div class="container bg-dark-subtle p-5 mt-5 row rounded-top overflow-hidden" id="game">
         {% for line in game %}
         <div class="row">
             {% for element in line %}
@@ -29,7 +29,7 @@ Crown Fiesta
             Bet: {{bet}}
         </div>
         <div class="col d-flex justify-content-end">
-            <form action="/" method="post">
+            <form action="/" method="post" id="spin">
                 <button type="submit" class="btn btn-danger btn-lg">SPIN</button>
             </form>
         </div>
