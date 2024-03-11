@@ -33,11 +33,11 @@ Crown Fiesta
         <div class="col d-flex align-items-center">
             Win: {{win}}
         </div>
-        <div class="col d-flex justify-content-end">
-            <form action="/" class="d-flex justify-content-end" method="post" id="spin">
-                <div class="input-group me-3">
-                    <span class="input-group-text me-3 p-1">Bet</label>
-                    <input class="form-control" name="bet" type="number" value="{{bet}}" step="2.5">
+        <div class="col justify-content-end">
+            <form action="/" class="d-flex justify-content-end mx-2" method="post" id="spin">
+                <div class="input-group me-3 p-1">
+                    <span class="input-group-text">Bet</span>
+                    <input class="form-control me-2" name="bet" type="number" value="{{bet}}" step="2.5">
                 </div>
                 <button type="submit" class="btn btn-danger btn-lg">SPIN</button>
             </form>

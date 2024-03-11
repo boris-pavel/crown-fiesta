@@ -51,7 +51,7 @@ def calculate_payline(symbol1, symbol2, symbol3, symbol4, symbol5, bet):
     symbol3_crown = False
     symbol4_crown = False
     if bet:
-        bet = round(bet / 35, 2)
+        bet = round(bet / 100, 2)
     # Check if in paying symbols
     if symbol1 not in [DOLLAR, STAR]:
         # If symbols 2,3,4 are CROWNS substitute them

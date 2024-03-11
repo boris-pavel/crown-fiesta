@@ -51,6 +51,15 @@ Session(app)
 db = SQL("sqlite:///crown.db")
 
 
+@app.after_request
+def after_request(response):
+    """Ensure responses aren't cached"""
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -66,16 +75,30 @@ def index():
                 error="You must log in to play.",
             )
         game = []
-        bet = float(request.form.get("bet"))
         balance = db.execute(
             "SELECT balance FROM users WHERE id = ?", session["user_id"]
         )[0]["balance"]
+        if request.form.get("bet"):
+            bet = float(request.form.get("bet"))
+        else:
+            return render_template(
+                "game.html",
+                game=[
+                    [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
+                    [SEVEN, CROWN, SEVEN, SEVEN, STAR],
+                    [SEVEN, CROWN, BELL, ORANGE, CHERRY],
+                ],
+                balance=balance,
+            )
+
         if bet < 0:
             return render_template(
-                "game_error.html",game=[
-                [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
-                [SEVEN, CROWN, SEVEN, SEVEN, STAR],
-                [SEVEN, CROWN, BELL, ORANGE, CHERRY]],
+                "game_error.html",
+                game=[
+                    [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
+                    [SEVEN, CROWN, SEVEN, SEVEN, STAR],
+                    [SEVEN, CROWN, BELL, ORANGE, CHERRY],
+                ],
                 error="Bet must be a positive integer",
                 bet=bet,
                 balance=balance,
@@ -135,25 +158,36 @@ def index():
             "game.html", game=game, balance=balance, win=win, bet=bet
         )
     else:
-        if "user_id" in session.keys() and session["user_id"] in db.execute(
-            "SELECT * FROM users WHERE id = ?", session["user_id"]
-        ):
-            balance = db.execute(
-                "SELECT balance FROM users WHERE id = ?", session["user_id"]
-            )[0]["balance"]
-            bet = db.execute("SELECT bet FROM users WHERE id = ?", session["user_id"])[
-                0
-            ]["bet"]
-            return render_template(
-                "game.html",
+        if "user_id" in session.keys():
+            user = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])
+            if len(user):
+                balance = db.execute(
+                    "SELECT balance FROM users WHERE id = ?", session["user_id"]
+                )[0]["balance"]
+                bet = db.execute(
+                    "SELECT bet FROM users WHERE id = ?", session["user_id"]
+                )[0]["bet"]
+                return render_template(
+                    "game.html",
+                    game=[
+                        [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
+                        [SEVEN, CROWN, SEVEN, SEVEN, STAR],
+                        [SEVEN, CROWN, BELL, ORANGE, CHERRY],
+                    ],
+                    balance=balance,
+                    bet=bet,
+                )
+            else:
+                return render_template(
+                "index.html",
                 game=[
                     [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
                     [SEVEN, CROWN, SEVEN, SEVEN, STAR],
                     [SEVEN, CROWN, BELL, ORANGE, CHERRY],
                 ],
-                balance=balance,
-                bet=bet,
+                bet=0,
             )
+
         else:
             return render_template(
                 "index.html",
@@ -196,15 +230,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to game page
-        return render_template(
-            "game.html",
-            game=[
-                [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
-                [SEVEN, CROWN, SEVEN, SEVEN, STAR],
-                [SEVEN, CROWN, BELL, ORANGE, CHERRY],
-            ],
-            bet=0.0,
-        )
+        return redirect("/", code=307)
 
     return render_template("login.html")
 
