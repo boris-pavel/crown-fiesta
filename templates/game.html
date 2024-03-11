@@ -37,7 +37,7 @@ Crown Fiesta
             <form action="/" class="d-flex justify-content-end" method="post" id="spin">
                 <div class="input-group me-3">
                     <span class="input-group-text me-3 p-1">Bet</label>
-                    <input class="form-control" type="number" value="{{bet}}" step="2.5">
+                    <input class="form-control" name="bet" type="number" value="{{bet}}" step="2.5">
                 </div>
                 <button type="submit" class="btn btn-danger btn-lg">SPIN</button>
             </form>
@@ -45,4 +45,5 @@ Crown Fiesta
 
     </div>
 </main>
+{% block modal %}{% endblock %}
 {% endblock %}

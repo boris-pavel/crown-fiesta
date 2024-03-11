@@ -11,7 +11,9 @@ CREATE TABLE users(
 
 CREATE TABLE transactions(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    user_id INTEGER NOT NULL,
     bet NUMERIC NOT NULL,
     win NUMERIC NOT NULL,
-    date TEXT NOT NULL
+    date TEXT NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );

@@ -66,6 +66,34 @@ def index():
                 error="You must log in to play.",
             )
         game = []
+        bet = float(request.form.get("bet"))
+        balance = db.execute(
+            "SELECT balance FROM users WHERE id = ?", session["user_id"]
+        )[0]["balance"]
+        if bet < 0:
+            return render_template(
+                "game_error.html",game=[
+                [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
+                [SEVEN, CROWN, SEVEN, SEVEN, STAR],
+                [SEVEN, CROWN, BELL, ORANGE, CHERRY]],
+                error="Bet must be a positive integer",
+                bet=bet,
+                balance=balance,
+            )
+
+        if bet > balance:
+            return render_template(
+                "game_error.html",
+                game=[
+                    [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
+                    [SEVEN, CROWN, SEVEN, SEVEN, STAR],
+                    [SEVEN, CROWN, BELL, ORANGE, CHERRY],
+                ],
+                error="Not enough funds.",
+                balance=balance,
+                bet=bet,
+            )
+
         for i in range(3):
             line = []
             for j in range(5):
@@ -90,16 +118,32 @@ def index():
         eliminate_column_duplicates(game)
         expand_crown(game)
         clear_winnings(game)
-        win = sum(calculate_winnings(game, 5))
-        balance = db.execute(
-            "SELECT balance FROM users WHERE id = ?", session["user_id"]
-        )[0]["balance"]
-        return render_template("game.html", game=game, balance=balance, win=win)
+        win = round(sum(calculate_winnings(game, bet)), 2)
+        balance = round(balance - bet + win, 2)
+
+        db.execute(
+            "UPDATE users SET balance = ? WHERE id = ?", balance, session["user_id"]
+        )
+        db.execute("UPDATE users SET bet = ? WHERE id = ?", bet, session["user_id"])
+        db.execute(
+            "INSERT INTO transactions (user_id, bet, win, date) VALUES(?, ?, ?, CURRENT_TIME)",
+            session["user_id"],
+            bet,
+            win,
+        )
+        return render_template(
+            "game.html", game=game, balance=balance, win=win, bet=bet
+        )
     else:
-        if "user_id" in session.keys():
+        if "user_id" in session.keys() and session["user_id"] in db.execute(
+            "SELECT * FROM users WHERE id = ?", session["user_id"]
+        ):
             balance = db.execute(
                 "SELECT balance FROM users WHERE id = ?", session["user_id"]
             )[0]["balance"]
+            bet = db.execute("SELECT bet FROM users WHERE id = ?", session["user_id"])[
+                0
+            ]["bet"]
             return render_template(
                 "game.html",
                 game=[
@@ -108,6 +152,7 @@ def index():
                     [SEVEN, CROWN, BELL, ORANGE, CHERRY],
                 ],
                 balance=balance,
+                bet=bet,
             )
         else:
             return render_template(
@@ -116,7 +161,8 @@ def index():
                     [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
                     [SEVEN, CROWN, SEVEN, SEVEN, STAR],
                     [SEVEN, CROWN, BELL, ORANGE, CHERRY],
-                ]
+                ],
+                bet=0,
             )
 
 
@@ -149,8 +195,16 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
-        # Redirect user to home page
-        return redirect("/")
+        # Redirect user to game page
+        return render_template(
+            "game.html",
+            game=[
+                [SEVEN, CROWN, SEVEN, PLUM, ORANGE],
+                [SEVEN, CROWN, SEVEN, SEVEN, STAR],
+                [SEVEN, CROWN, BELL, ORANGE, CHERRY],
+            ],
+            bet=0.0,
+        )
 
     return render_template("login.html")
 
