@@ -1,1 +1,5 @@
 Flask
+cs50
+Flask-Session
+pytz
+requests

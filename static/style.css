@@ -2,6 +2,7 @@
     --animate-delay: 0.3s;
 }
 
-main {
-
+#danger {
+    width: 5%;
+    height: 5%;
 }

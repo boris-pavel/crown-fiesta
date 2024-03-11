@@ -6,11 +6,8 @@ Crown Fiesta
 
 {% block nav_items %}
 <li class="nav-item">
-    <a class="nav-link link-light fs-4" href="/register">Register</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link link-light fs-4" href="/login">Login</a>
-  </li>
+    <a class="nav-link link-light fs-4" href="/logout">Logout</a>
+</li>
 {% endblock %}
 
 {% block game %}
@@ -20,9 +17,9 @@ Crown Fiesta
         <div class="row">
             {% for element in line %}
             <div class="m-2 col reel-{{loop.index}} animate__animated animate__bounceInDown
-                   animate__delay-{{loop.index}}s {{element.name}} symbol
-                   border-5 border-danger rounded-1 p-1
-                  {% if element.win == True %}border{% endif %}">
+                 animate__delay-{{loop.index}}s {{element.name}} symbol
+                 border-5 border-danger rounded-1 p-1
+                {% if element.win == True %}border{% endif %}">
                 <img class="img-fluid" src="{{element.path}}" alt="Icon">
             </div>
             {% endfor %}
@@ -36,16 +33,16 @@ Crown Fiesta
         <div class="col d-flex align-items-center">
             Win: {{win}}
         </div>
-        <div class="col d-flex align-items-center">
-            Bet: {{bet}}
-        </div>
         <div class="col d-flex justify-content-end">
-            <form action="/" method="post" id="spin">
+            <form action="/" class="d-flex justify-content-end" method="post" id="spin">
+                <div class="input-group me-3">
+                    <span class="input-group-text me-3 p-1">Bet</label>
+                    <input class="form-control" type="number" value="{{bet}}" step="2.5">
+                </div>
                 <button type="submit" class="btn btn-danger btn-lg">SPIN</button>
             </form>
         </div>
 
     </div>
 </main>
-{% block modal %}{% endblock %}
 {% endblock %}

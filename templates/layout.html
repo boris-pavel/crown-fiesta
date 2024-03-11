@@ -15,12 +15,13 @@
 </head>
 
 <body class="d-flex flex-column vh-100">
-    <nav class="navbar bg-danger w-75 rounded-pill m-2 mx-auto">
-        <div class="container-fluid">
-            <a href="/" class="navbar-brand mb-0 h1 text-light">Crown Fiesta</a>
-        </div>
-
-    </nav>
+    <ul class="nav justify-content-center bg-danger p-2 align-items-center">
+        <li class="nav-item flex-grow-1">
+          <a class="nav-link active link-light fs-3" aria-current="page" href="/">Crown Fiesta</a>
+        </li>
+        {% block nav_items %}
+        {% endblock %}
+      </ul>
     {% block game %}
     {% endblock %}
     <script src="static/script.js"></script>
