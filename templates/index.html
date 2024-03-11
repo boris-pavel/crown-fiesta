@@ -1,5 +1,39 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Crown Fiesta
+Crown Fiesta
+{% endblock %}
+
+
+{% block game %}
+<main class="container w-50 mx-auto row">
+    <div class="container bg-dark-subtle p-5 mt-5 row rounded-top" id="game">
+        {% for line in game %}
+        <div class="row">
+            {% for element in line %}
+            <div
+                class="m-2 col reel-{{loop.index}} animate__animated animate__bounceInDown animate__delay-{{loop.index}}s {{element.name}} symbol">
+                <img class="img-fluid" src="{{element.path}}" alt="Icon"></div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row p-3 bg-dark text-light rounded-bottom">
+        <div class="col d-flex align-items-center">
+            Balance: {{balance}}
+        </div>
+        <div class="col d-flex align-items-center">
+            Win: {{win}}
+        </div>
+        <div class="col d-flex align-items-center">
+            Bet: {{bet}}
+        </div>
+        <div class="col d-flex justify-content-end">
+            <form action="/" method="post">
+                <button type="submit" class="btn btn-danger btn-lg">SPIN</button>
+            </form>
+        </div>
+
+    </div>
+</main>
 {% endblock %}

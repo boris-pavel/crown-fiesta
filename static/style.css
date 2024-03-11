@@ -1,0 +1,7 @@
+:root {
+    --animate-delay: 0.3s;
+  }
+
+#game {
+    overflow: hidden;
+}
