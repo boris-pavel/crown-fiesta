@@ -6,14 +6,17 @@ Crown Fiesta
 
 
 {% block game %}
-<main class="container w-50 mx-auto row">
+<main class="container-fluid w-50 mx-auto row">
     <div class="container bg-dark-subtle p-5 mt-5 row rounded-top overflow-hidden" id="game">
         {% for line in game %}
         <div class="row">
             {% for element in line %}
-            <div
-                class="m-2 col reel-{{loop.index}} animate__animated animate__bounceInDown animate__delay-{{loop.index}}s {{element.name}} symbol">
-                <img class="img-fluid" src="{{element.path}}" alt="Icon"></div>
+            <div class="m-2 col reel-{{loop.index}} animate__animated animate__bounceInDown
+                 animate__delay-{{loop.index}}s {{element.name}} symbol
+                 border-5 border-danger rounded-1 p-1
+                {% if element.win == True %}border{% endif %}">
+                <img class="img-fluid" src="{{element.path}}" alt="Icon">
+            </div>
             {% endfor %}
         </div>
         {% endfor %}

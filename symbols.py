@@ -1,10 +1,11 @@
 
 class Symbol:
     """A class for symbols on the reels"""
-    def __init__(self, name, path, points):
+    def __init__(self, name, path, points, win=False):
         self.name = name
         self.path = path
         self.points = points
+        self.win = win
 
     def __eq__(self, other):
         return self.name == other.name

@@ -10,10 +10,11 @@ from symbols import (
     DOLLAR,
     CROWN,
     BELL,
+    Symbol
 )
 from flask import Flask, render_template, request
 import random
-from helpers import eliminate_column_duplicates, expand_crown, calculate_total_winnings
+from helpers import eliminate_column_duplicates, expand_crown, calculate_winnings, clear_winnings
 
 SYMBOLS = [
     CROWN,
@@ -47,18 +48,27 @@ def index():
             line = []
             for j in range(5):
                 l = SYMBOLS[:]
+                # Check for crowns on columns 1 and 5
                 if j == 0 or j == 4:
                     l.pop(0)
-                    line.append(random.choice(l))
+                    choice = random.choice(l)
+                    el = Symbol(choice.name, choice.path, choice.points)
+                    line.append(el)
+                # Check for stars on columns 2 and 4
                 elif j == 1 or j == 3:
                     l.pop(1)
-                    line.append(random.choice(l))
+                    choice = random.choice(l)
+                    el = Symbol(choice.name, choice.path, choice.points)
+                    line.append(el)
                 else:
-                    line.append(random.choice(l))
+                    choice = random.choice(l)
+                    el = Symbol(choice.name, choice.path, choice.points)
+                    line.append(el)
             game.append(line)
         eliminate_column_duplicates(game)
         expand_crown(game)
-        win = calculate_total_winnings(game, 5)
+        clear_winnings(game)
+        win = sum(calculate_winnings(game, 5))
         return render_template("index.html", game=game, balance=0, win=win)
     else:
         return render_template(
